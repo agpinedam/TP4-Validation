@@ -6,6 +6,10 @@ import Login from './components/Login'; // Página de login
 import Register from './components/Register'; // Página de registro
 import Profile from './components/Profile'; // Página de perfil
 import EditProfile from './components/EditProfile'; // Página para editar perfil
+import Calendar from './components/Calendar';
+import EditCourse from './components/EditCourse';
+import CreateCourse from './components/CreateCourse';
+import InstructorCourses from './components/InstructorCourses';
 
 ReactDOM.createRoot(document.getElementById('root')).render(
     <BrowserRouter>
@@ -15,6 +19,10 @@ ReactDOM.createRoot(document.getElementById('root')).render(
             <Route path="/register" element={<Register />} />
             <Route path="/profile" element={<Profile />} />
             <Route path="/edit-profile" element={<EditProfile />} />
+            <Route path="/calendar" element={<Calendar />} />
+            <Route path="/edit-course" element={<EditCourse />} />
+            <Route path="/create-course" element={<CreateCourse />} />
+            <Route path="/my-courses" element={<InstructorCourses />} />
         </Routes>
     </BrowserRouter>
 );
