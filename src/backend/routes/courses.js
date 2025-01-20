@@ -90,4 +90,21 @@ router.delete('/:courseId', async (req, res) => {
     }
 });
 
+router.get('/user/:userId', async (req, res) => {
+    const { userId } = req.params;
+
+    try {
+        const result = await db.query(
+            `SELECT * FROM courses 
+             WHERE instructor_id = $1 OR student_id = $1`,
+            [userId]
+        );
+
+        res.status(200).json({ courses: result.rows });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: 'Erreur lors de la récupération des cours' });
+    }
+});
+
 module.exports = router;

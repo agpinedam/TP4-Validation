@@ -56,17 +56,19 @@ router.post('/login', async (req, res) => {
 
     try {
         const result = await db.query('SELECT * FROM users WHERE email = $1', [email]);
+
         if (result.rows.length === 0) {
             return res.status(401).json({ error: 'Email ou mot de passe incorrect, veuillez réessayer' });
         }
 
         const user = result.rows[0];
         const isMatch = await bcrypt.compare(password, user.password);
+
         if (!isMatch) {
             return res.status(401).json({ error: 'Email ou mot de passe incorrect, veuillez réessayer' });
         }
 
-        // Devolver información básica del usuario
+        // Devuelve todos los campos relevantes, incluyendo user_type
         res.status(200).json({
             message: 'Connexion réussie',
             user: {
@@ -74,7 +76,7 @@ router.post('/login', async (req, res) => {
                 email: user.email,
                 name: user.name,
                 surname: user.surname,
-                userType: user.user_type,
+                user_type: user.user_type, // Asegúrate de devolver este campo
                 about: user.about,
                 experience: user.experience,
                 photo: user.photo,
@@ -87,6 +89,5 @@ router.post('/login', async (req, res) => {
         res.status(500).json({ error: 'Erreur lors de la connexion' });
     }
 });
-
 
 module.exports = router;

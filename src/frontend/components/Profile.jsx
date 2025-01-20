@@ -3,12 +3,21 @@ import { useNavigate } from 'react-router-dom';
 
 const Profile = () => {
     const [user, setUser] = useState(null);
+    const [courses, setCourses] = useState([]);
     const navigate = useNavigate();
 
     useEffect(() => {
+        // Cargar los datos del usuario desde localStorage
         const userData = localStorage.getItem('user');
         if (userData) {
-            setUser(JSON.parse(userData));
+            const parsedUser = JSON.parse(userData);
+            setUser(parsedUser);
+
+            // Cargar los cursos asociados al usuario
+            fetch(`/api/courses/user/${parsedUser.id}`)
+                .then((response) => response.json())
+                .then((data) => setCourses(data.courses))
+                .catch((error) => console.error('Erreur lors de la récupération des cours:', error));
         }
     }, []);
 
@@ -42,11 +51,34 @@ const Profile = () => {
                 {user.user_type === 'Formateur' && (
                     <button
                         onClick={() => navigate('/create-course')}
-                        className="bg-green-500 text-white w-full py-2 rounded-lg hover:bg-green-600"
+                        className="bg-green-500 text-white w-full py-2 rounded-lg hover:bg-green-600 mb-4"
                     >
                         Ajouter un cours
                     </button>
                 )}
+
+                {/* Lista de cursos */}
+                <div className="mt-6">
+                    <h3 className="text-xl font-bold text-gray-700 mb-4">Mes cours</h3>
+                    {courses.length > 0 ? (
+                        <ul>
+                            {courses.map((course) => (
+                                <li
+                                    key={course.id}
+                                    className="mb-4 bg-gray-200 p-4 rounded-lg shadow"
+                                >
+                                    <h4 className="text-lg font-semibold">{course.title}</h4>
+                                    <p>
+                                        {course.date} à {course.time}
+                                    </p>
+                                    <p>Lieu: {course.location}</p>
+                                </li>
+                            ))}
+                        </ul>
+                    ) : (
+                        <p className="text-gray-500">Aucun cours associé</p>
+                    )}
+                </div>
             </div>
         </div>
     );
