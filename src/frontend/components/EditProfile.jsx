@@ -3,21 +3,38 @@ import { useNavigate } from 'react-router-dom';
 
 const EditProfile = () => {
     const [user, setUser] = useState(null);
+    const [errors, setErrors] = useState({});
     const [message, setMessage] = useState('');
     const navigate = useNavigate();
 
     useEffect(() => {
+        // Obtener datos del usuario desde localStorage
         const userData = localStorage.getItem('user');
         if (userData) {
             setUser(JSON.parse(userData));
         }
     }, []);
 
-    const handleUpdate = async (e) => {
-        e.preventDefault();
+    const validateFields = () => {
+        const newErrors = {};
 
         if (!user.user_type) {
-            setMessage('Veuillez remplir le champs domaine');
+            newErrors.user_type = 'Veuillez remplir le champs domaine';
+        }
+
+        if (user.photo && !/^https?:\/\/[^\s$.?#].[^\s]*$/.test(user.photo)) {
+            newErrors.photo = 'Le format de votre fichier n’est pas reconnu.';
+        }
+
+        return newErrors;
+    };
+
+    const handleUpdate = async (e) => {
+        e.preventDefault();
+        const validationErrors = validateFields();
+        setErrors(validationErrors);
+
+        if (Object.keys(validationErrors).length > 0) {
             return;
         }
 
@@ -43,7 +60,7 @@ const EditProfile = () => {
     };
 
     if (!user) {
-        return <p>Chargement...</p>;
+        return <p className="text-gray-700 text-lg">Chargement...</p>;
     }
 
     return (
@@ -58,6 +75,24 @@ const EditProfile = () => {
                             value={user.about || ''}
                             onChange={(e) => setUser({ ...user, about: e.target.value })}
                         />
+                    </div>
+                    <div className="mb-4">
+                        <label className="block text-gray-700 mb-2">Expérience</label>
+                        <textarea
+                            className="border border-gray-300 rounded-lg w-full p-2 focus:outline-blue-500"
+                            value={user.experience || ''}
+                            onChange={(e) => setUser({ ...user, experience: e.target.value })}
+                        />
+                    </div>
+                    <div className="mb-4">
+                        <label className="block text-gray-700 mb-2">Photo (URL)</label>
+                        <input
+                            type="url"
+                            className="border border-gray-300 rounded-lg w-full p-2 focus:outline-blue-500"
+                            value={user.photo || ''}
+                            onChange={(e) => setUser({ ...user, photo: e.target.value })}
+                        />
+                        {errors.photo && <p className="text-red-500 text-sm">{errors.photo}</p>}
                     </div>
                     <div className="mb-4">
                         <label className="block text-gray-700 mb-2">Numéro de téléphone</label>
@@ -79,15 +114,31 @@ const EditProfile = () => {
                     </div>
                     <div className="mb-4">
                         <label className="block text-gray-700 mb-2">Type d'utilisateur</label>
-                        <select
-                            className="border border-gray-300 rounded-lg w-full p-2 focus:outline-blue-500"
-                            value={user.user_type || ''}
-                            onChange={(e) => setUser({ ...user, user_type: e.target.value })}
-                        >
-                            <option value="">Sélectionner</option>
-                            <option value="Formateur">Formateur</option>
-                            <option value="Apprenant">Apprenant</option>
-                        </select>
+                        <div className="flex gap-4">
+                            <label className="flex items-center">
+                                <input
+                                    type="radio"
+                                    name="user_type"
+                                    value="Formateur"
+                                    className="mr-2"
+                                    checked={user.user_type === 'Formateur'}
+                                    onChange={(e) => setUser({ ...user, user_type: e.target.value })}
+                                />
+                                Formateur
+                            </label>
+                            <label className="flex items-center">
+                                <input
+                                    type="radio"
+                                    name="user_type"
+                                    value="Apprenant"
+                                    className="mr-2"
+                                    checked={user.user_type === 'Apprenant'}
+                                    onChange={(e) => setUser({ ...user, user_type: e.target.value })}
+                                />
+                                Apprenant
+                            </label>
+                        </div>
+                        {errors.user_type && <p className="text-red-500 text-sm">{errors.user_type}</p>}
                     </div>
                     <button
                         type="submit"
