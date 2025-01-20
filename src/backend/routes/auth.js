@@ -50,23 +50,43 @@ router.post('/register', async (req, res) => {
 router.post('/login', async (req, res) => {
     const { email, password } = req.body;
 
+    if (!email || !password) {
+        return res.status(400).json({ error: 'Veuillez remplir le champs sélectionné' });
+    }
+
     try {
         const result = await db.query('SELECT * FROM users WHERE email = $1', [email]);
         if (result.rows.length === 0) {
-            return res.status(401).json({ error: 'Email o contraseña incorrectos' });
+            return res.status(401).json({ error: 'Email ou mot de passe incorrect, veuillez réessayer' });
         }
 
         const user = result.rows[0];
         const isMatch = await bcrypt.compare(password, user.password);
         if (!isMatch) {
-            return res.status(401).json({ error: 'Email o contraseña incorrectos' });
+            return res.status(401).json({ error: 'Email ou mot de passe incorrect, veuillez réessayer' });
         }
 
-        res.status(200).json({ message: 'Inicio de sesión exitoso', user: { id: user.id, name: user.name, email: user.email } });
+        // Devolver información básica del usuario
+        res.status(200).json({
+            message: 'Connexion réussie',
+            user: {
+                id: user.id,
+                email: user.email,
+                name: user.name,
+                surname: user.surname,
+                userType: user.user_type,
+                about: user.about,
+                experience: user.experience,
+                photo: user.photo,
+                phone: user.phone,
+                address: user.address,
+            },
+        });
     } catch (error) {
         console.error(error);
-        res.status(500).json({ error: 'Error al iniciar sesión' });
+        res.status(500).json({ error: 'Erreur lors de la connexion' });
     }
 });
+
 
 module.exports = router;

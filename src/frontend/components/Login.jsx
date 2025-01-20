@@ -4,7 +4,6 @@ import { useNavigate } from 'react-router-dom';
 const Login = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-    const [rememberMe, setRememberMe] = useState(false);
     const [message, setMessage] = useState('');
     const navigate = useNavigate();
 
@@ -26,8 +25,11 @@ const Login = () => {
             const data = await response.json();
 
             if (response.ok) {
-                setMessage('Connexion réussie');
-                navigate('/profile'); // Redirigir al perfil
+                // Guardar datos del usuario en localStorage
+                localStorage.setItem('user', JSON.stringify(data.user));
+
+                // Redirigir al perfil
+                navigate('/profile');
             } else {
                 setMessage(data.error);
             }
@@ -37,9 +39,9 @@ const Login = () => {
     };
 
     return (
-        <div className="min-h-screen flex flex-col items-center justify-center bg-grayLight font-sans">
-            <div className="bg-whiteCustom p-8 rounded-lg shadow-md w-96">
-                <h2 className="text-2xl font-bold text-blueCustom mb-6 text-center">Connexion</h2>
+        <div className="min-h-screen flex flex-col items-center justify-center bg-gray-100 font-sans">
+            <div className="bg-white p-8 rounded-lg shadow-md w-96">
+                <h2 className="text-2xl font-bold text-blue-500 mb-6 text-center">Connexion</h2>
                 <form onSubmit={handleLogin}>
                     <div className="mb-4">
                         <label className="block text-gray-700 mb-2">Email</label>
@@ -63,18 +65,9 @@ const Login = () => {
                             required
                         />
                     </div>
-                    <div className="mb-4 flex items-center">
-                        <input
-                            type="checkbox"
-                            className="mr-2"
-                            checked={rememberMe}
-                            onChange={(e) => setRememberMe(e.target.checked)}
-                        />
-                        <label className="text-gray-700">Se souvenir de moi</label>
-                    </div>
                     <button
                         type="submit"
-                        className="bg-blueCustom text-whiteCustom w-full py-2 rounded-lg hover:bg-blue-600"
+                        className="bg-blue-500 text-white w-full py-2 rounded-lg hover:bg-blue-600"
                     >
                         Se connecter
                     </button>

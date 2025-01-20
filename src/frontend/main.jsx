@@ -1,20 +1,18 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import App from './App';
+import Home from './components/Home';
 import Login from './components/Login';
 import Register from './components/Register';
-import Home from './components/Home';
-import './index.css';
+import Profile from './components/Profile'; // Si deseas mostrar el perfil tras login
 
 ReactDOM.createRoot(document.getElementById('root')).render(
-    <React.StrictMode>
-        <BrowserRouter>
-            <Routes>
-                <Route path="/" element={<Home />} />
-                <Route path="/login" element={<Login />} />
-                <Route path="/register" element={<Register />} />
-            </Routes>
-        </BrowserRouter>
-    </React.StrictMode>
+    <BrowserRouter>
+        <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/register" element={<Register />} />
+            <Route path="/profile" element={<Profile />} />
+        </Routes>
+    </BrowserRouter>
 );
