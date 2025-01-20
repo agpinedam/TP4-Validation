@@ -9,20 +9,13 @@ const app = express();
 app.use(cors());
 app.use(bodyParser.json());
 
-// Ruta base
-app.get('/', (req, res) => {
-    res.send('API funcionando correctamente.');
-});
-
-// Importar rutas
 const authRoutes = require('./routes/auth');
-const courseRoutes = require('./routes/courses');
 const userRoutes = require('./routes/users');
+const courseRoutes = require('./routes/courses');
 
-// Usar las rutas
 app.use('/api/auth', authRoutes);
-app.use('/api/courses', courseRoutes);
 app.use('/api/users', userRoutes);
+app.use('/api/courses', courseRoutes);
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {

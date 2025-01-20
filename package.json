@@ -3,11 +3,11 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "dev:backend": "nodemon backend/index.js",
+    "dev:backend": "nodemon src/backend/index.js",
     "dev:frontend": "vite",
     "dev": "npm run dev:backend & npm run dev:frontend",
     "build": "vite build",
-    "start": "node backend/index.js"
+    "start": "node src/backend/index.js"
   },
   "keywords": [],
   "author": "",
@@ -26,6 +26,9 @@
     "vite": "^6.0.9"
   },
   "devDependencies": {
-    "nodemon": "^3.1.9"
+    "autoprefixer": "^10.4.20",
+    "nodemon": "^3.1.9",
+    "postcss": "^8.5.1",
+    "tailwindcss": "^3.4.17"
   }
 }
