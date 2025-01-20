@@ -1,15 +1,16 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 const Login = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [rememberMe, setRememberMe] = useState(false);
     const [message, setMessage] = useState('');
+    const navigate = useNavigate();
 
     const handleLogin = async (e) => {
         e.preventDefault();
 
-        // Validaciones de campos vacíos
         if (!email || !password) {
             setMessage('Veuillez remplir le champs sélectionné');
             return;
@@ -24,11 +25,11 @@ const Login = () => {
 
             const data = await response.json();
 
-            // Validación de error en credenciales
             if (response.ok) {
-                setMessage(`Bienvenue, ${data.user.name}`);
+                setMessage('Connexion réussie');
+                navigate('/profile'); // Redirigir al perfil
             } else {
-                setMessage('Email ou mot de passe incorrect, veuillez réessayer');
+                setMessage(data.error);
             }
         } catch (error) {
             setMessage('Erreur de connexion au serveur');

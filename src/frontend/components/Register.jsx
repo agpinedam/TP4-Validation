@@ -6,20 +6,16 @@ const Register = () => {
     const [confirmPassword, setConfirmPassword] = useState('');
     const [name, setName] = useState('');
     const [surname, setSurname] = useState('');
+    const [userType, setUserType] = useState('Apprenant'); // Valor predeterminado
     const [acceptTerms, setAcceptTerms] = useState(false);
     const [message, setMessage] = useState('');
 
     const handleRegister = async (e) => {
         e.preventDefault();
 
-        // Validaciones
+        // Validaciones básicas
         if (!email || !password || !confirmPassword || !name || !surname || !acceptTerms) {
-            setMessage('Veuillez remplir le champs sélectionné');
-            return;
-        }
-
-        if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-            setMessage('Cette adresse e-mail est non valide. Assurez-vous qu’elle respecte ce format: exemple@email.com');
+            setMessage('Veuillez remplir tous les champs');
             return;
         }
 
@@ -28,13 +24,8 @@ const Register = () => {
             return;
         }
 
-        if (password.length < 8) {
-            setMessage('Votre mot de passe doit contenir au minimum 8 caractères');
-            return;
-        }
-
-        if (!/(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[^a-zA-Z0-9])/.test(password)) {
-            setMessage('Votre mot de passe doit contenir un chiffre, un caractère minuscule, un caractère majuscule et un caractère spécial.');
+        if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+            setMessage('Cette adresse e-mail est non valide');
             return;
         }
 
@@ -42,7 +33,7 @@ const Register = () => {
             const response = await fetch('/api/auth/register', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ email, password, name: `${surname} ${name}` }),
+                body: JSON.stringify({ email, password, confirmPassword, name, surname, userType, acceptTerms }),
             });
 
             const data = await response.json();
@@ -50,7 +41,7 @@ const Register = () => {
             if (response.ok) {
                 setMessage('Inscription réussie');
             } else {
-                setMessage(data.error || 'Erreur lors de l\'inscription');
+                setMessage(data.error);
             }
         } catch (error) {
             setMessage('Erreur de connexion au serveur');
@@ -58,10 +49,11 @@ const Register = () => {
     };
 
     return (
-        <div className="min-h-screen flex flex-col items-center justify-center bg-grayLight font-sans">
-            <div className="bg-whiteCustom p-8 rounded-lg shadow-md w-96">
-                <h2 className="text-2xl font-bold text-blueCustom mb-6 text-center">Inscription</h2>
+        <div className="min-h-screen flex flex-col items-center justify-center bg-gray-100 font-sans">
+            <div className="bg-white p-8 rounded-lg shadow-md w-96">
+                <h2 className="text-2xl font-bold text-blue-500 mb-6 text-center">Inscription</h2>
                 <form onSubmit={handleRegister}>
+                    {/* Nom */}
                     <div className="mb-4">
                         <label className="block text-gray-700 mb-2">Nom</label>
                         <input
@@ -73,6 +65,7 @@ const Register = () => {
                             required
                         />
                     </div>
+                    {/* Prénom */}
                     <div className="mb-4">
                         <label className="block text-gray-700 mb-2">Prénom</label>
                         <input
@@ -84,6 +77,7 @@ const Register = () => {
                             required
                         />
                     </div>
+                    {/* Email */}
                     <div className="mb-4">
                         <label className="block text-gray-700 mb-2">Email</label>
                         <input
@@ -95,6 +89,7 @@ const Register = () => {
                             required
                         />
                     </div>
+                    {/* Mot de passe */}
                     <div className="mb-4">
                         <label className="block text-gray-700 mb-2">Mot de passe</label>
                         <input
@@ -106,6 +101,7 @@ const Register = () => {
                             required
                         />
                     </div>
+                    {/* Confirmez votre mot de passe */}
                     <div className="mb-4">
                         <label className="block text-gray-700 mb-2">Confirmez votre mot de passe</label>
                         <input
@@ -117,6 +113,7 @@ const Register = () => {
                             required
                         />
                     </div>
+                    {/* Accepter les conditions d'utilisation */}
                     <div className="mb-4 flex items-center">
                         <input
                             type="checkbox"
@@ -126,13 +123,15 @@ const Register = () => {
                         />
                         <label className="text-gray-700">Accepter les conditions d'utilisation</label>
                     </div>
+                    {/* Botón de enviar */}
                     <button
                         type="submit"
-                        className="bg-green-500 text-whiteCustom w-full py-2 rounded-lg hover:bg-green-600"
+                        className="bg-blue-500 text-white w-full py-2 rounded-lg hover:bg-blue-600"
                     >
                         S'inscrire
                     </button>
                 </form>
+                {/* Mensaje de error */}
                 {message && <p className="text-red-500 mt-4 text-center">{message}</p>}
             </div>
         </div>
