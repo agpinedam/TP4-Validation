@@ -66,7 +66,7 @@ const EditProfile = () => {
             if (response.ok) {
                 setMessage('Profil mis à jour avec succès');
                 localStorage.setItem('user', JSON.stringify(data.user));
-                navigate('/profile');
+                navigate(`/profile/${user.id}`)
             } else {
                 setMessage(data.error);
             }

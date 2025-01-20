@@ -10,6 +10,7 @@ import Calendar from './components/Calendar';
 import EditCourse from './components/EditCourse';
 import CreateCourse from './components/CreateCourse';
 import InstructorCourses from './components/InstructorCourses';
+import ReserveCourse from './components/ReserveCourse';
 
 ReactDOM.createRoot(document.getElementById('root')).render(
     <BrowserRouter>
@@ -17,12 +18,13 @@ ReactDOM.createRoot(document.getElementById('root')).render(
             <Route path="/" element={<Home />} />
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
-            <Route path="/profile" element={<Profile />} />
+            <Route path="/profile/:userId" element={<Profile />} />            
             <Route path="/edit-profile" element={<EditProfile />} />
             <Route path="/calendar" element={<Calendar />} />
             <Route path="/edit-course" element={<EditCourse />} />
             <Route path="/create-course" element={<CreateCourse />} />
             <Route path="/my-courses" element={<InstructorCourses />} />
+            <Route path="/reserve-course/:instructorId" element={<ReserveCourse />} />
         </Routes>
     </BrowserRouter>
 );
