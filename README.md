@@ -166,7 +166,7 @@ npm run dev
 ![Login](./images/Login.png)
 
 #### **Profil Utilisateur**
-![Profil Utilisateur](./images/Profile.png)
+![Profil Utilisateur](./images/ProfileFormateur.png)
 
 #### **Édition du Profil (Apprenant)**
 ![Édition du Profil Apprenant](./images/EditProfilApprenant.png)
