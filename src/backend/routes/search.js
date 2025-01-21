@@ -35,6 +35,7 @@ router.get('/advanced', async (req, res) => {
 router.get('/quick', async (req, res) => {
     const { query } = req.query;
 
+    // Validar que el parámetro query exista
     if (!query) {
         return res.status(400).json({ error: 'Veuillez remplir le champs sélectionné.' });
     }
@@ -66,7 +67,7 @@ router.get('/quick', async (req, res) => {
             users: usersResult.rows,
         });
     } catch (error) {
-        console.error(error);
+        console.error('Erreur lors de la recherche:', error);
         res.status(500).json({ error: 'Erreur lors de la recherche.' });
     }
 });

@@ -89,7 +89,7 @@ router.delete('/:courseId', async (req, res) => {
         res.status(500).json({ error: 'Erreur lors de la suppression du cours' });
     }
 });
-
+/*
 router.get('/user/:userId', async (req, res) => {
     const { userId } = req.params;
 
@@ -105,7 +105,7 @@ router.get('/user/:userId', async (req, res) => {
         console.error(error);
         res.status(500).json({ error: 'Erreur lors de la récupération des cours' });
     }
-});
+});*/
 
 router.get('/availability/:instructorId', async (req, res) => {
     const { instructorId } = req.params;
@@ -190,5 +190,58 @@ router.post('/courses', async (req, res) => {
         res.status(500).json({ error: 'Erreur lors de la création du cours.' });
     }
 });
+
+router.post('/', async (req, res) => {
+    const { title, date, time, domaine, location, instructor_id } = req.body;
+
+    if (!title || !date || !time || !domaine || !location || !instructor_id) {
+        return res.status(400).json({ error: 'Tous les champs obligatoires doivent être remplis.' });
+    }
+
+    try {
+        const result = await db.query(
+            `INSERT INTO courses (title, date, time, domaine, location, instructor_id)
+             VALUES ($1, $2, $3, $4, $5, $6) RETURNING *`,
+            [title, date, time, domaine, location, instructor_id]
+        );
+        res.status(201).json({ course: result.rows[0] });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: 'Erreur lors de la création du cours.' });
+    }
+});
+
+router.get('/user/:userId', async (req, res) => {
+    const { userId } = req.params;
+
+    try {
+        const result = await db.query(
+            `SELECT * FROM courses WHERE instructor_id = $1 OR student_id = $1`,
+            [userId]
+        );
+        res.status(200).json({ courses: result.rows });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: 'Erreur lors de la récupération des cours.' });
+    }
+});
+
+router.delete('/:courseId', async (req, res) => {
+    const { courseId } = req.params;
+
+    try {
+        const result = await db.query(`DELETE FROM courses WHERE id = $1 RETURNING *`, [courseId]);
+
+        if (result.rows.length === 0) {
+            return res.status(404).json({ error: 'Cours non trouvé.' });
+        }
+
+        res.status(200).json({ message: 'Cours supprimé avec succès.' });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: 'Erreur lors de la suppression du cours.' });
+    }
+});
+
 
 module.exports = router;

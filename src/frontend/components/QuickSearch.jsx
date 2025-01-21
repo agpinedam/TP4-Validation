@@ -7,16 +7,16 @@ const QuickSearch = () => {
 
     const handleSearch = async (e) => {
         e.preventDefault();
-
+    
         if (!query) {
             setError('Veuillez remplir le champs sélectionné.');
             return;
         }
-
+    
         try {
-            const response = await fetch(`/api/search/quick?query=${query}`);
+            const response = await fetch(`/api/search/quick?query=${encodeURIComponent(query)}`);
             const data = await response.json();
-
+    
             if (response.ok) {
                 setResults([...data.courses, ...data.users]);
                 setError('');
@@ -28,7 +28,7 @@ const QuickSearch = () => {
             console.error('Erreur lors de la recherche:', error);
             setError('Erreur lors de la recherche.');
         }
-    };
+    };    
 
     return (
         <div className="p-4 bg-gray-100">
