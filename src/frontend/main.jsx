@@ -11,6 +11,8 @@ import EditCourse from './components/EditCourse';
 import CreateCourse from './components/CreateCourse';
 import InstructorCourses from './components/InstructorCourses';
 import ReserveCourse from './components/ReserveCourse';
+import AdvancedSearch from './components/AdvancedSearch';
+import QuickSearch from './components/QuickSearch';
 
 ReactDOM.createRoot(document.getElementById('root')).render(
     <BrowserRouter>
@@ -25,6 +27,8 @@ ReactDOM.createRoot(document.getElementById('root')).render(
             <Route path="/create-course" element={<CreateCourse />} />
             <Route path="/my-courses" element={<InstructorCourses />} />
             <Route path="/reserve-course/:instructorId" element={<ReserveCourse />} />
+            <Route path="/advanced-search" element={<AdvancedSearch />} />
+            <Route path="/quick-search" element={<QuickSearch />} />
         </Routes>
     </BrowserRouter>
 );

@@ -170,4 +170,25 @@ router.post('/reserve', async (req, res) => {
     }
 });
 
+router.post('/courses', async (req, res) => {
+    const { title, date, time, location, domaine, instructor_id } = req.body;
+
+    if (!title || !date || !time || !location || !domaine || !instructor_id) {
+        return res.status(400).json({ error: 'Tous les champs obligatoires doivent être remplis.' });
+    }
+
+    try {
+        const result = await db.query(
+            `INSERT INTO courses (title, date, time, location, domaine, instructor_id)
+             VALUES ($1, $2, $3, $4, $5, $6) RETURNING *`,
+            [title, date, time, location, domaine, instructor_id]
+        );
+
+        res.status(201).json({ course: result.rows[0] });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: 'Erreur lors de la création du cours.' });
+    }
+});
+
 module.exports = router;
