@@ -174,4 +174,10 @@ npm run dev
 #### **Édition du Profil (Formateur)**
 ![Édition du Profil Formateur](./images/EditProfileFormateur.png)
 
+#### **Créer un cours**
+![Édition du Profil Formateur](./images/Calendar.png)
+
+![Édition du Profil Formateur](./images/Hours.png)
+
+![Édition du Profil Formateur](./images/CourseForme.png)
 

@@ -56,6 +56,14 @@ const Profile = () => {
                 >
                     Éditer le profil
                 </button>
+                {user.user_type === 'Formateur' && (
+                    <button
+                        onClick={() => navigate('/create-course')}
+                        className="bg-green-500 text-white w-full py-2 rounded-lg hover:bg-green-600"
+                    >
+                        Ajouter un cours
+                    </button>
+                )}
             </div>
         </div>
     );
