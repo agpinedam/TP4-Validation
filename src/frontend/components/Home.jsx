@@ -40,7 +40,7 @@ const Home = () => {
                 </div>
                 {/* Recherche Avancée */}
                 <div>
-                    <h2 className="text-2xl font-bold text-gray-800 mb-4">Recherche Avancée</h2>
+                    {/*<h2 className="text-2xl font-bold text-gray-800 mb-4">Recherche Avancée</h2>*/}
                     <AdvancedSearch />
                 </div>
             </div>
